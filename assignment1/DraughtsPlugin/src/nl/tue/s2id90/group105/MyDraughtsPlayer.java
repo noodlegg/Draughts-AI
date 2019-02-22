@@ -156,10 +156,36 @@ public class MyDraughtsPlayer  extends DraughtsPlayer{
         if (stopped) { stopped = false; throw new AIStoppedException(); }
         DraughtsState state = node.getState();
         // ToDo: write an alphabeta search to compute bestMove and value
-        Move bestMove = state.getMoves().get(0);
-        int value = 0;
-        node.setBestMove(bestMove);
-        return value;
+        Move bestMove = null;
+        // Evaluate all endStates and when currentDepth is 0
+        if (state.isEndState() || currentDepth == 0) {
+            return evaluate(state);
+        } else {
+            // List all possible moves
+            List<Move> moves = state.getMoves();
+            int currentValue = Integer.MIN_VALUE;
+            
+            for (Move move: moves) {
+                // Do a move to reach next state
+                state.doMove(move);
+                // Get nextValue with recursive call
+                int nextValue = alphaBetaMin(node, alpha, beta, currentDepth - 1, maxDepth);
+                // If next value is larger than the current
+                if (nextValue > currentValue) {
+                    bestMove = move;
+                    currentValue = nextValue;
+                }
+                alpha = Math.max(alpha, currentValue);
+                state.undoMove(move);
+                // Beta cutoff
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            if (currentDepth == maxDepth) {
+                node.setBestMove(bestMove);
+            }
+            return currentValue;
     }
 
     /** A method that evaluates the given state. */
