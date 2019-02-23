@@ -195,8 +195,19 @@ public class MyDraughtsPlayerV2  extends DraughtsPlayer{
                 return Integer.MAX_VALUE - 1;
             }
         }
+        int totalScore = 0;
+        totalScore += piecesCount(state);
+        return totalScore;
         
-        // Calculate all pieces on the board
+    }
+    
+    /**
+     * Calculates a score for all pieces on the board
+     * Kings are worth triple compared to normal pieces
+     * 
+     * @return score
+     */
+    private int piecesCount(DraughtsState state) {
         int whiteScore = 0;
         int blackScore = 0;
         int[] pieces = state.getPieces();
@@ -220,5 +231,5 @@ public class MyDraughtsPlayerV2  extends DraughtsPlayer{
             }
         }
         return whiteScore - blackScore;
-    }
+}
 }
