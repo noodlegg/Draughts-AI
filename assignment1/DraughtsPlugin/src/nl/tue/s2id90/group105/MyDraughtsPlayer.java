@@ -117,7 +117,7 @@ public class MyDraughtsPlayer  extends DraughtsPlayer{
         DraughtsState state = node.getState();
         // ToDo: write an alphabeta search to compute bestMove and value
         Move bestMove = null;
-        // Evaluate all endStates and when currentDepth is 0
+        // Evaluate all endStates and when depth is 0
         if (state.isEndState() || depth == 0) {
             return evaluate(state);
         } else {
@@ -142,9 +142,7 @@ public class MyDraughtsPlayer  extends DraughtsPlayer{
                     break;
                 }
             }
-            if (depth == 0) {
-                node.setBestMove(bestMove);
-            }
+            node.setBestMove(bestMove);
             return currentValue;
         }
      }
@@ -180,9 +178,7 @@ public class MyDraughtsPlayer  extends DraughtsPlayer{
                     break;
                 }
             }
-            if (depth == 0) {
-                node.setBestMove(bestMove);
-            }
+            node.setBestMove(bestMove);
             return currentValue;
         }
     }
