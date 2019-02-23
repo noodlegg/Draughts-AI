@@ -185,5 +185,40 @@ public class MyDraughtsPlayer  extends DraughtsPlayer{
 
     /** A method that evaluates the given state. */
     // ToDo: write an appropriate evaluation function
-    int evaluate(DraughtsState state) { return 0; }
+    int evaluate(DraughtsState state) { 
+        // Check if someone won
+        if (state.isEndState()) {
+            if (state.isWhiteToMove()) {
+                // If black won
+                return Integer.MIN_VALUE + 1;
+            } else { // If white won
+                return Integer.MAX_VALUE - 1;
+            }
+        }
+        
+        // Calculate all pieces on the board
+        int whiteScore = 0;
+        int blackScore = 0;
+        int[] pieces = state.getPieces();
+        for (int i = 0; i < pieces.length; i++) {
+            int piece = pieces[i];
+            // See on which row the piece is, close to other end is preferable
+            int row = (int) Math.floor((i - 1) / 5);
+            switch (piece) {
+                case DraughtsState.WHITEKING:
+                    whiteScore += 3;
+                    break;
+                case DraughtsState.WHITEPIECE:
+                    whiteScore += 1;
+                    break;
+                case DraughtsState.BLACKKING:
+                    blackScore += 3;
+                    break;
+                case DraughtsState.BLACKPIECE:
+                    blackScore += 1;
+                    break;
+            }
+        }
+        return whiteScore - blackScore;
+    }
 }
