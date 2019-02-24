@@ -225,7 +225,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
             }
         }
         int totalScore = 0;
-        totalScore += piecesCount(state);
+        totalScore += (piecesCount(state) * 1000);
         totalScore += tempiCount(state);
         return totalScore;
     }
@@ -242,8 +242,6 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
         int[] pieces = state.getPieces();
         for (int i = 0; i < pieces.length; i++) {
             int piece = pieces[i];
-            // See on which row the piece is, close to other end is preferable
-            int row = (int) Math.floor((i - 1) / 5);
             switch (piece) {
                 case DraughtsState.WHITEKING:
                     whiteScore += 3;
@@ -274,7 +272,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
         int whiteValue = 0;
         int[] pieces = state.getPieces();
         for (int i = 0; i < pieces.length; i++) {
-            int row = (int) Math.floor((i - 1) / 5);
+            int row = (int) Math.floor(i / 5);
             switch (row) {
                 case (0):
                     // If black piece
