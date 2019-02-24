@@ -141,7 +141,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
         DraughtsState state = node.getState();
         // ToDo: write an alphabeta search to compute bestMove and value
         Move bestMove = null;
-        // Evaluate all endStates and when depth is 0
+        // Evaluate all endStates or when depth is 0
         if (state.isEndState() || depth == 0) {
             return evaluate(state);
         } else {
@@ -225,8 +225,9 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
             }
         }
         int totalScore = 0;
-        totalScore += (piecesCount(state) * 1000);
+        totalScore += (piecesCount(state) * 10);
         totalScore += tempiCount(state);
+        totalScore += attackMoves(state);
         return totalScore;
     }
 
@@ -265,7 +266,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
      * 1. Count number of pieces per row
      * 2. Multiply it by row number as current player
      * 
-     * @return white temp value - black tempi value
+     * @return white tempi value - black tempi value
      */
     private int tempiCount(DraughtsState state) {
         int blackValue = 0;
@@ -276,77 +277,91 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
             switch (row) {
                 case (0):
                     // If black piece
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 1;
-                    } else { // Else white piece
-                        whiteValue += 10;
+                    } else if (pieces[i] == 1){ // If new white king
+                        whiteValue += 3000;
                     }
                     break;
                 case (1):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 2;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 9;
                     }
                     break;
                 case (2):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 3;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 8;
                     }
                     break;
                 case (3):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 4;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 7;
                     }
                     break;
                 case (4):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 5;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 6;
                     }
                     break;
                 case (5):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 6;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 5;
                     }
                     break;
                 case (6):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 7;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 4;
                     }
                     break;
                 case (7):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 8;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 3;
                     }
                     break;
                 case (8):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
+                    if (pieces[i] == 2) {
                         blackValue += 9;
-                    } else {
+                    } else if (pieces[i] == 1) {
                         whiteValue += 2;
                     }
                     break;
                 case (9):
-                    if (pieces[i] == 2 || pieces[i] == 4) {
-                        blackValue += 10;
-                    } else {
+                    if (pieces[i] == 2) { // If new black king
+                        blackValue += 3000;
+                    } else if (pieces[i] == 1) { // If white piece
                         whiteValue += 1;
                     }
                     break;
             }
         }
         return whiteValue - blackValue;
+    }
+    
+    /**
+     * @return number of attack moves
+     */
+    private int attackMoves(DraughtsState state) {
+        int numAttackMoves = 0;
+        List<Move> moves = state.getMoves();
+        for (Move move: moves) {
+            if (move.isCapture()) {
+                numAttackMoves++;
+            }
+        }
+        return numAttackMoves;
     }
 }
