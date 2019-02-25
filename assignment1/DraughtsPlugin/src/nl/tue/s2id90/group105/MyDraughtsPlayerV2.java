@@ -72,7 +72,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
     /**
      * Tries to make alphabeta search stop. Search should be implemented such
      * that it throws an AIStoppedException when boolean stopped is set to true;
-    *
+     *
      */
     @Override
     public void stop() {
@@ -152,8 +152,10 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
             for (Move move : moves) {
                 // Do a move to reach next state
                 state.doMove(move);
+                DraughtsNode newNode = new DraughtsNode(state);
+
                 // Get nextValue with recursive call
-                int nextValue = alphaBetaMax(node, alpha, beta, depth - 1);
+                int nextValue = alphaBetaMax(newNode, alpha, beta, depth - 1);
                 // If next value is smaller than the current
                 if (nextValue < currentValue) {
                     bestMove = move;
@@ -191,8 +193,10 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
             for (Move move : moves) {
                 // Do a move to reach next state
                 state.doMove(move);
+                DraughtsNode newNode = new DraughtsNode(state);
+
                 // Get nextValue with recursive call
-                int nextValue = alphaBetaMin(node, alpha, beta, depth - 1);
+                int nextValue = alphaBetaMin(newNode, alpha, beta, depth - 1);
                 // If next value is larger than the current
                 if (nextValue > currentValue) {
                     bestMove = move;
@@ -227,7 +231,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
         int totalScore = 0;
         totalScore += (piecesCount(state) * 10);
         totalScore += tempiCount(state);
-        totalScore += attackMoves(state);
+        //totalScore += attackMoves(state);
         return totalScore;
     }
 
@@ -260,12 +264,11 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
         }
         return whiteScore - blackScore;
     }
-    
+
     /**
-     * Calculates tempi of a state, this works as follows:
-     * 1. Count number of pieces per row
-     * 2. Multiply it by row number as current player
-     * 
+     * Calculates tempi of a state, this works as follows: 1. Count number of
+     * pieces per row 2. Multiply it by row number as current player
+     *
      * @return white tempi value - black tempi value
      */
     private int tempiCount(DraughtsState state) {
@@ -279,7 +282,7 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
                     // If black piece
                     if (pieces[i] == 2) {
                         blackValue += 1;
-                    } else if (pieces[i] == 1){ // If new white king
+                    } else if (pieces[i] == 1) { // If new white king
                         whiteValue += 3000;
                     }
                     break;
@@ -350,14 +353,14 @@ public class MyDraughtsPlayerV2 extends DraughtsPlayer {
         }
         return whiteValue - blackValue;
     }
-    
+
     /**
      * @return number of attack moves
      */
     private int attackMoves(DraughtsState state) {
         int numAttackMoves = 0;
         List<Move> moves = state.getMoves();
-        for (Move move: moves) {
+        for (Move move : moves) {
             if (move.isCapture()) {
                 numAttackMoves++;
             }
